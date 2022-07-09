@@ -1,0 +1,74 @@
+
+<div>
+//Login: check shop in DB
+    // yes: put in Session (id, token_app, use_name)
+        // welcome
+    // no: get token
+        // First install:
+            // Login -> getAccess
+                // aceess permission
+                // get list -> put DB.
+        // Reinstall:
+            // update status app.
+
+//Webhook: retrieve data through api
+
+
+(? Problem:
+    - Validation: form upload.
+    - Eloquent: create many table -> query.
+    - Asynchronous: Queue,Event.
+    -Creiket.
+
+</div>
+
+
+
+
+UPDATE
+$store_id = Session::get('store_id');
+$store = Store::where('id',$store_id)->first();
+$url = "https://". $store->myshopify_domain ."/admin/api/2022-04/products/6936821203082.json";
+// if (request()->hasFile('product_image')){
+// // dd($request->file('product_image')->pat‌​h());
+
+// }
+// $image = $request->file('product_image');
+// $removeImg = public_path('backend/images/products') .'/'. $image;
+// if ($request->hasFile('image')) {
+// unlink($removeImg);
+// $image = uniqid() . '-' . $request->image->getClientOriginalName();
+
+// }
+// $newImageName = uniqid() . '-' . $request->product_image->getClientOriginalName();
+// $path = public_path('backend/images/products/');
+// // dd($path);
+// $request->product_image->move($path,$newImageName);
+// dd($path.$newImageName);
+$image = base64_encode(
+file_get_contents(("/Users/khanhpn/Desktop/laravel_app_shopify/public/images/bg_1.jpg"))
+);
+info($image);
+
+$product = array(
+"product"=> array(
+"id"=>"6936821203082",
+"title"=>"product sfbskfupdate",
+"body_html"=>"access s djs fjs body",
+// "updated_at"=>Carbon::now(),
+"images"=>[array(
+"attachment"=>$image
+)]
+)
+);
+// echo"
+<pre>";
+        // dd(json_encode($product));
+        // echo"</pre>";
+// dd( $product);
+$getDataProduct = Http::withHeaders([
+'X-Shopify-Access-Token' => $store->access_token,
+
+])->withBody(json_encode($product), 'application/json')->put($url);
+$products = json_decode( $getDataProduct->body(),true);
+dd( $products);
